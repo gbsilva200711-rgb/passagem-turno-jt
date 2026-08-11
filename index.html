@@ -1,0 +1,1307 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>J&T Express | Passagem de Turno Frota</title>
+    <style>
+:root {
+  --jt-red: #e60012;
+  --jt-red-dark: #bd0010;
+  --ink: #1b1d21;
+  --muted: #68707d;
+  --line: #dde1e7;
+  --soft: #f4f6f8;
+  --panel: #ffffff;
+  --green: #18a058;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  background:
+    linear-gradient(135deg, rgba(230, 0, 18, 0.12), transparent 32%),
+    linear-gradient(160deg, #fbfbfc, #eceff3);
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.app-shell {
+  width: min(1240px, calc(100vw - 28px));
+  margin: 18px auto;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: 0 18px 48px rgba(20, 24, 32, 0.14);
+}
+
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(320px, 430px) 1fr;
+  gap: 18px;
+  align-items: center;
+  padding: 16px 20px;
+  color: #fff;
+  background:
+    linear-gradient(90deg, rgba(120, 0, 8, 0.18), transparent 48%),
+    var(--jt-red);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.brand-logo-card {
+  display: grid;
+  place-items: center;
+  width: 235px;
+  height: 64px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: #e60012;
+  overflow: hidden;
+}
+
+.jt-wordmark {
+  color: #fff;
+  font-size: 35px;
+  font-style: italic;
+  font-weight: 950;
+  letter-spacing: 0;
+  line-height: 1;
+  transform: skew(-8deg);
+}
+
+.jt-wordmark span {
+  margin-left: 8px;
+  font-size: 21px;
+  font-weight: 900;
+}
+
+.brand-subtitle {
+  max-width: 130px;
+  font-size: 15px;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.shift-strip {
+  display: grid;
+  grid-template-columns: 150px 180px minmax(180px, 1fr);
+  gap: 12px;
+  align-items: end;
+}
+
+.shift-strip label,
+.field {
+  display: grid;
+  gap: 7px;
+}
+
+.shift-strip span,
+.field span {
+  font-size: 13px;
+  font-weight: 800;
+  color: inherit;
+}
+
+.shift-strip input,
+.shift-strip select {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  color: #fff;
+  background: rgba(255, 255, 255, 0.14);
+  padding: 8px 10px;
+  outline: none;
+}
+
+.shift-strip select option {
+  color: var(--ink);
+}
+
+.tabs {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-bottom: 1px solid var(--line);
+  background: #f9fafb;
+}
+
+.tab {
+  min-height: 52px;
+  border: 0;
+  border-right: 1px solid var(--line);
+  color: #4b5563;
+  background: transparent;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.tab:last-child {
+  border-right: 0;
+}
+
+.tab.active {
+  color: var(--jt-red);
+  background: #fff;
+  box-shadow: inset 0 -4px 0 var(--jt-red);
+}
+
+.content {
+  min-height: 600px;
+  padding: 22px;
+}
+
+.tab-panel {
+  display: none;
+}
+
+.tab-panel.active {
+  display: block;
+}
+
+.section-head {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.2;
+}
+
+p {
+  margin: 6px 0 0;
+  color: var(--muted);
+}
+
+.grid {
+  display: grid;
+  gap: 14px;
+}
+
+.grid.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.grid.three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.compact {
+  margin-top: 16px;
+}
+
+.stack {
+  display: grid;
+  gap: 14px;
+}
+
+.field span {
+  color: #374151;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid #cfd5dd;
+  background: #fff;
+  color: var(--ink);
+  padding: 10px 11px;
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  line-height: 1.45;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--jt-red);
+  box-shadow: 0 0 0 3px rgba(230, 0, 18, 0.12);
+}
+
+.occurrence {
+  border: 1px solid var(--line);
+  background: #fff;
+  padding: 16px;
+}
+
+.occurrence-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 13px;
+}
+
+.occurrence-head strong {
+  font-size: 17px;
+}
+
+.icon-button,
+.ghost-button,
+.primary-button,
+.whatsapp-button {
+  min-height: 42px;
+  border: 0;
+  padding: 0 14px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.icon-button {
+  width: 38px;
+  min-height: 38px;
+  color: #fff;
+  background: #111827;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.ghost-button {
+  color: var(--jt-red);
+  background: #fff1f2;
+  border: 1px solid rgba(230, 0, 18, 0.24);
+}
+
+.primary-button {
+  color: #fff;
+  background: var(--jt-red);
+}
+
+.secondary-button {
+  color: var(--jt-red);
+  background: #fff;
+  border: 1px solid rgba(230, 0, 18, 0.28);
+}
+
+.whatsapp-button {
+  color: #fff;
+  background: var(--green);
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.checkline {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin: 0 0 16px;
+}
+
+.checkline.mini {
+  margin: 14px 0 0;
+}
+
+.status-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  background: var(--soft);
+  padding: 0 12px;
+  font-weight: 750;
+}
+
+.status-option input {
+  width: 16px;
+  min-height: 16px;
+  accent-color: var(--jt-red);
+}
+
+.summary-box {
+  min-height: 250px;
+  border: 0;
+  border-top: 1px solid var(--line);
+  background: #fbfcfd;
+  color: #20242a;
+  font-size: 14px;
+  line-height: 1.55;
+  font-family: Consolas, "Segoe UI", monospace;
+}
+
+.summary-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 16px;
+}
+
+.summary-card,
+.summary-side {
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.summary-side {
+  padding: 16px;
+  background: linear-gradient(180deg, #ffffff, #fafbfc);
+}
+
+.visual-summary {
+  background:
+    linear-gradient(180deg, rgba(230, 0, 18, 0.045), transparent 180px),
+    #ffffff;
+  color: #20242a;
+  padding: 22px;
+}
+
+.visual-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding-bottom: 16px;
+  border-bottom: 4px solid var(--jt-red);
+}
+
+.visual-logo {
+  display: inline-flex;
+  align-items: baseline;
+  min-width: 165px;
+  min-height: 48px;
+  padding: 8px 12px;
+  color: #fff;
+  background: var(--jt-red);
+  font-size: 25px;
+  font-style: italic;
+  font-weight: 950;
+  transform: skew(-7deg);
+}
+
+.visual-logo span {
+  margin-left: 7px;
+  font-size: 15px;
+  font-weight: 900;
+}
+
+.visual-title {
+  display: grid;
+  gap: 4px;
+  text-align: right;
+}
+
+.visual-title strong {
+  font-size: 24px;
+  line-height: 1.15;
+}
+
+.visual-title span {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.visual-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.visual-metrics div {
+  border: 1px solid #eef0f3;
+  border-left: 6px solid var(--jt-red);
+  background: #fff;
+  padding: 12px;
+}
+
+.visual-metrics span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.visual-metrics strong {
+  display: block;
+  margin-top: 3px;
+  color: var(--jt-red);
+  font-size: 25px;
+}
+
+.visual-section {
+  border: 1px solid #eceff3;
+  background: #fff;
+  padding: 14px;
+  margin-top: 12px;
+}
+
+.visual-section h2 {
+  margin: 0 0 10px;
+  color: #111827;
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.visual-section p {
+  margin: 0;
+  color: #2b3036;
+  white-space: pre-line;
+}
+
+.visual-section.split {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.visual-item {
+  border-left: 4px solid var(--jt-red);
+  background: #fafbfc;
+  padding: 10px 12px;
+  margin-bottom: 9px;
+}
+
+.visual-item:last-child {
+  margin-bottom: 0;
+}
+
+.visual-item strong {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 15px;
+}
+
+.visual-item p {
+  margin: 3px 0;
+  color: #3a414a;
+  font-size: 14px;
+  line-height: 1.38;
+}
+
+.visual-footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid #e6e9ee;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 750;
+}
+
+.text-summary-details {
+  border-top: 1px solid var(--line);
+}
+
+.text-summary-details summary {
+  cursor: pointer;
+  padding: 12px 16px;
+  color: var(--jt-red);
+  font-weight: 900;
+}
+
+.side-title {
+  margin-bottom: 12px;
+  color: #111827;
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 58px;
+  border: 1px solid #eceff3;
+  border-left: 5px solid var(--jt-red);
+  background: #fff;
+  padding: 10px 12px;
+  margin-bottom: 10px;
+}
+
+.metric span {
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.metric strong {
+  color: var(--jt-red);
+  font-size: 20px;
+}
+
+.hint {
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+@media (max-width: 860px) {
+  .app-shell {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    border: 0;
+  }
+
+  .topbar,
+  .shift-strip,
+  .summary-layout,
+  .visual-section.split,
+  .grid.two,
+  .grid.three {
+    grid-template-columns: 1fr;
+  }
+
+  .brand {
+    align-items: start;
+  }
+
+  .brand-logo-card {
+    width: min(245px, 100%);
+  }
+
+  .visual-top,
+  .visual-footer {
+    align-items: start;
+    display: grid;
+    text-align: left;
+  }
+
+  .visual-title {
+    text-align: left;
+  }
+
+  .visual-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .tabs {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .section-head {
+    display: grid;
+  }
+
+  .content {
+    padding: 16px;
+  }
+}
+
+</style>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <div class="brand">
+          <div class="brand-logo-card">
+            <div class="jt-wordmark">J&amp;T<span>EXPRESS</span></div>
+          </div>
+          <div>
+            <div class="brand-subtitle">Passagem de turno | Frota</div>
+          </div>
+        </div>
+        <div class="shift-strip">
+          <label>
+            <span>Data</span>
+            <input id="data" type="date" />
+          </label>
+          <label>
+            <span>Turno</span>
+            <select id="turno">
+              <option>Diurno</option>
+              <option>Noturno</option>
+            </select>
+          </label>
+          <label>
+            <span>Responsável</span>
+            <input id="responsavel" type="text" placeholder="Nome" />
+          </label>
+        </div>
+      </header>
+
+      <nav class="tabs" aria-label="Seções do relatório">
+        <button class="tab active" type="button" data-tab="ocorrencias">Ocorrências</button>
+        <button class="tab" type="button" data-tab="passagem">Passagem</button>
+        <button class="tab" type="button" data-tab="checklist">Checklist</button>
+        <button class="tab" type="button" data-tab="resumo">Resumo</button>
+      </nav>
+
+      <section class="content">
+        <section class="tab-panel active" id="tab-ocorrencias">
+          <div class="section-head">
+            <div>
+              <h1>Ocorrências e Ação Tomada</h1>
+              <p>Registre o equipamento, o problema identificado e a tratativa aplicada.</p>
+            </div>
+            <button class="ghost-button" type="button" id="addOcorrencia">+ Ocorrência</button>
+          </div>
+
+          <div id="ocorrenciasList" class="stack"></div>
+        </section>
+
+        <section class="tab-panel" id="tab-passagem">
+          <div class="section-head">
+            <div>
+              <h1>Passagem de Turno</h1>
+              <p>Deixe claro o que o próximo turno precisa acompanhar.</p>
+            </div>
+          </div>
+
+          <div class="grid two">
+            <label class="field">
+              <span>Ficou para fazer</span>
+              <textarea id="ficouFazer" rows="7" placeholder="Ex.: acompanhar veículo liberado provisoriamente e direcionar para manutenção no retorno."></textarea>
+            </label>
+            <label class="field">
+              <span>Atenção no próximo turno</span>
+              <textarea id="atencaoProximo" rows="7" placeholder="Ex.: conferir se a avaliação foi aberta e se a manutenção recebeu a informação."></textarea>
+            </label>
+          </div>
+
+          <div class="grid three compact">
+            <label class="field">
+              <span>Entrega</span>
+              <input id="entrega" type="text" placeholder="Quem entrega" />
+            </label>
+            <label class="field">
+              <span>Recebe</span>
+              <input id="recebe" type="text" placeholder="Quem recebe" />
+            </label>
+            <label class="field">
+              <span>Operação</span>
+              <input id="operacao" type="text" placeholder="Base / operação" />
+            </label>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-checklist">
+          <div class="section-head">
+            <div>
+              <h1>Checklist de Saídas</h1>
+              <p>Informe se as saídas foram 100% ou se houve exceção.</p>
+            </div>
+          </div>
+
+          <div class="checkline">
+            <label class="status-option">
+              <input type="radio" name="saidaStatus" value="100%" checked />
+              <span>Saídas 100%</span>
+            </label>
+            <label class="status-option">
+              <input type="radio" name="saidaStatus" value="com exceção" />
+              <span>Com exceção</span>
+            </label>
+            <label class="status-option">
+              <input type="radio" name="saidaStatus" value="pendente" />
+              <span>Pendente</span>
+            </label>
+          </div>
+
+          <div class="grid two">
+            <label class="field">
+              <span>Resumo das saídas</span>
+              <textarea id="resumoSaidas" rows="6" placeholder="Ex.: todos 100%."></textarea>
+            </label>
+            <label class="field">
+              <span>Exceções / observações</span>
+              <textarea id="excecoesSaida" rows="6" placeholder="Ex.: carreta XXX saiu 90% por buraquinho no baú, liberada com orientação de reavaliar."></textarea>
+            </label>
+          </div>
+        </section>
+
+        <section class="tab-panel" id="tab-resumo">
+          <div class="section-head">
+            <div>
+              <h1>Resumo Geral</h1>
+              <p>Texto pronto para copiar ou abrir no WhatsApp.</p>
+            </div>
+            <div class="actions">
+              <button class="primary-button" type="button" id="copyResumo">Copiar</button>
+              <button class="secondary-button" type="button" id="copyImage">Copiar imagem</button>
+              <button class="secondary-button" type="button" id="downloadImage">Baixar imagem</button>
+              <button class="whatsapp-button" type="button" id="openWhatsapp">WhatsApp</button>
+            </div>
+          </div>
+
+          <div class="summary-layout">
+            <div class="summary-card">
+              <div class="visual-summary" id="visualSummary">
+                <div class="visual-top">
+                  <div class="visual-logo">J&amp;T <span>EXPRESS</span></div>
+                  <div class="visual-title">
+                    <strong>Passagem de Turno - Frota</strong>
+                    <span id="cardMeta">Data: - | Turno: -</span>
+                  </div>
+                </div>
+
+                <div class="visual-metrics">
+                  <div>
+                    <span>Ocorrencias</span>
+                    <strong id="cardOcorrencias">0</strong>
+                  </div>
+                  <div>
+                    <span>Saidas</span>
+                    <strong id="cardSaidas">100%</strong>
+                  </div>
+                  <div>
+                    <span>Pendencias</span>
+                    <strong id="cardPendencias">0</strong>
+                  </div>
+                </div>
+
+                <div class="visual-section">
+                  <h2>Ocorrencias / Acao tomada</h2>
+                  <div id="cardOcorrenciasList" class="visual-list"></div>
+                </div>
+
+                <div class="visual-section split">
+                  <div>
+                    <h2>Checklist de saidas</h2>
+                    <p id="cardChecklist">-</p>
+                  </div>
+                  <div>
+                    <h2>Passagem / Pendencias</h2>
+                    <p id="cardPassagem">-</p>
+                  </div>
+                </div>
+
+                <div class="visual-footer">
+                  <span id="cardResp">Responsavel: -</span>
+                  <span>J&amp;T Express | Operacao Frota</span>
+                </div>
+              </div>
+              <details class="text-summary-details">
+                <summary>Ver texto para WhatsApp</summary>
+                <textarea id="resumoFinal" class="summary-box" rows="12" readonly></textarea>
+              </details>
+            </div>
+            <aside class="summary-side">
+              <div class="side-title">Resumo do turno</div>
+              <div class="metric">
+                <span>Ocorrências</span>
+                <strong id="metricOcorrencias">0</strong>
+              </div>
+              <div class="metric">
+                <span>Status saídas</span>
+                <strong id="metricSaidas">100%</strong>
+              </div>
+              <div class="metric">
+                <span>Pendências</span>
+                <strong id="metricPendencias">0</strong>
+              </div>
+              <p class="hint">A mensagem é gerada só na tela. O app não salva histórico.</p>
+            </aside>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <template id="ocorrenciaTemplate">
+      <article class="occurrence">
+        <div class="occurrence-head">
+          <strong>Ocorrência</strong>
+          <button class="icon-button remove-occurrence" type="button" title="Remover">×</button>
+        </div>
+        <div class="grid three">
+          <label class="field">
+            <span>Tipo</span>
+            <select class="occ-tipo">
+              <option>Cavalo</option>
+              <option>Carreta</option>
+              <option>Truck</option>
+              <option>VUC</option>
+              <option>Outro</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Prefixo / placa</span>
+            <input class="occ-veiculo" type="text" placeholder="Ex.: TLC7F64 / GI09A12" />
+          </label>
+          <label class="field">
+            <span>Condição</span>
+            <select class="occ-condicao">
+              <option>Operando</option>
+              <option>Liberado provisoriamente</option>
+              <option>Parar no retorno</option>
+              <option>Bloqueado</option>
+            </select>
+          </label>
+        </div>
+        <div class="grid two">
+          <label class="field">
+            <span>Ocorrência</span>
+            <textarea class="occ-relato" rows="4" placeholder="Ex.: amortecedor da cabine com avaria / buraquinho no baú / alinhamento da carreta."></textarea>
+          </label>
+          <label class="field">
+            <span>Ação tomada</span>
+            <textarea class="occ-acao" rows="4" placeholder="Ex.: liberação provisória, orientação à operação e parada para avaliação no retorno."></textarea>
+          </label>
+        </div>
+        <label class="field">
+          <span>Observação</span>
+          <input class="occ-obs" type="text" placeholder="Ex.: liberado provisoriamente, precisa passar por nova avaliação/manutenção." />
+        </label>
+        <div class="checkline mini">
+          <label class="status-option">
+            <input type="radio" class="occ-status" name="status-template" value="Resolvido" checked />
+            <span>Resolvido</span>
+          </label>
+          <label class="status-option">
+            <input type="radio" class="occ-status" name="status-template" value="Liberado provisoriamente" />
+            <span>Liberado provisoriamente</span>
+          </label>
+          <label class="status-option">
+            <input type="radio" class="occ-status" name="status-template" value="Pendente manutenção" />
+            <span>Pendente manutenção</span>
+          </label>
+        </div>
+      </article>
+    </template>
+
+    <script>
+const tabs = document.querySelectorAll(".tab");
+const panels = document.querySelectorAll(".tab-panel");
+const ocorrenciasList = document.querySelector("#ocorrenciasList");
+const template = document.querySelector("#ocorrenciaTemplate");
+const resumoFinal = document.querySelector("#resumoFinal");
+
+const fields = [
+  "data",
+  "turno",
+  "responsavel",
+  "ficouFazer",
+  "atencaoProximo",
+  "entrega",
+  "recebe",
+  "operacao",
+  "resumoSaidas",
+  "excecoesSaida",
+];
+
+function value(id) {
+  return document.querySelector(`#${id}`)?.value.trim() || "";
+}
+
+function selectedRadio(name) {
+  return document.querySelector(`input[name="${name}"]:checked`)?.value || "";
+}
+
+function fallback(text, empty = "-") {
+  return text || empty;
+}
+
+function escapeHtml(text) {
+  return String(text)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatDate(raw) {
+  if (!raw) return "-";
+  const [year, month, day] = raw.split("-");
+  return `${day}/${month}/${year}`;
+}
+
+function activateTab(tabName) {
+  tabs.forEach((tab) => tab.classList.toggle("active", tab.dataset.tab === tabName));
+  panels.forEach((panel) => panel.classList.toggle("active", panel.id === `tab-${tabName}`));
+  if (tabName === "resumo") updateResumo();
+}
+
+function uniqueStatusName() {
+  return `status-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function addOcorrencia(data = {}) {
+  const node = template.content.firstElementChild.cloneNode(true);
+  const radioName = uniqueStatusName();
+
+  node.querySelectorAll(".occ-status").forEach((radio) => {
+    radio.name = radioName;
+    radio.checked = radio.value === (data.status || "Resolvido");
+  });
+
+  node.querySelector(".occ-tipo").value = data.tipo || "Cavalo";
+  node.querySelector(".occ-veiculo").value = data.veiculo || "";
+  node.querySelector(".occ-condicao").value = data.condicao || "Operando";
+  node.querySelector(".occ-relato").value = data.relato || "";
+  node.querySelector(".occ-acao").value = data.acao || "";
+  node.querySelector(".occ-obs").value = data.obs || "";
+
+  node.querySelector(".remove-occurrence").addEventListener("click", () => {
+    if (ocorrenciasList.children.length > 1) {
+      node.remove();
+      updateResumo();
+    }
+  });
+
+  node.addEventListener("input", updateResumo);
+  node.addEventListener("change", updateResumo);
+  ocorrenciasList.appendChild(node);
+  updateResumo();
+}
+
+function getOcorrencias() {
+  return [...ocorrenciasList.querySelectorAll(".occurrence")].map((node) => ({
+    tipo: node.querySelector(".occ-tipo").value.trim(),
+    veiculo: node.querySelector(".occ-veiculo").value.trim(),
+    condicao: node.querySelector(".occ-condicao").value.trim(),
+    relato: node.querySelector(".occ-relato").value.trim(),
+    acao: node.querySelector(".occ-acao").value.trim(),
+    obs: node.querySelector(".occ-obs").value.trim(),
+    status: node.querySelector(".occ-status:checked")?.value || "",
+  }));
+}
+
+function buildResumo() {
+  const header = [
+    "PASSAGEM DE TURNO - FROTA | J&T EXPRESS",
+    `Data: ${formatDate(value("data"))} | Turno: ${fallback(value("turno"))}`,
+    `Responsavel: ${fallback(value("responsavel"))}`,
+    `Operacao: ${fallback(value("operacao"))}`,
+  ];
+
+  const ocorrencias = getOcorrencias()
+    .filter((item) => item.veiculo || item.relato || item.acao || item.obs)
+    .map((item, index) => {
+      return [
+        `${index + 1}) ${fallback(item.tipo)} | ${fallback(item.veiculo, "Prefixo/placa nao informado")}`,
+        `Condicao: ${fallback(item.condicao)}`,
+        `Ocorrencia: ${fallback(item.relato)}`,
+        `Acao tomada: ${fallback(item.acao)}`,
+        `Status: ${fallback(item.status)}`,
+        item.obs ? `Obs.: ${item.obs}` : "",
+      ]
+        .filter(Boolean)
+        .join("\n");
+    });
+
+  const checklist = [
+    `Status das saidas: ${selectedRadio("saidaStatus")}`,
+    `Resumo: ${fallback(value("resumoSaidas"))}`,
+    value("excecoesSaida") ? `Excecoes: ${value("excecoesSaida")}` : "",
+  ].filter(Boolean);
+
+  const passagem = [
+    `Entrega: ${fallback(value("entrega"))} | Recebe: ${fallback(value("recebe"))}`,
+    `Ficou para fazer: ${fallback(value("ficouFazer"))}`,
+    `Atencao proximo turno: ${fallback(value("atencaoProximo"))}`,
+  ];
+
+  return [
+    "J&T EXPRESS",
+    header.join("\n"),
+    "------------------------------",
+    "OCORRENCIAS / ACAO TOMADA",
+    ocorrencias.length ? ocorrencias.join("\n\n") : "Sem ocorrencias informadas.",
+    "------------------------------",
+    "CHECKLIST DE SAIDAS",
+    checklist.join("\n"),
+    "------------------------------",
+    "PASSAGEM / PENDENCIAS",
+    passagem.join("\n"),
+  ].join("\n");
+}
+
+function updateMetrics() {
+  const preenchidas = getOcorrencias().filter((item) => item.veiculo || item.relato || item.acao || item.obs);
+const pendencias = [
+  value("ficouFazer"),
+  value("atencaoProximo"),
+].filter((item) => item.trim() !== "").length;
+
+  document.querySelector("#metricOcorrencias").textContent = preenchidas.length;
+  document.querySelector("#metricSaidas").textContent = selectedRadio("saidaStatus") || "100%";
+  document.querySelector("#metricPendencias").textContent = pendencias;
+  document.querySelector("#cardOcorrencias").textContent = preenchidas.length;
+  document.querySelector("#cardSaidas").textContent = selectedRadio("saidaStatus") || "100%";
+  document.querySelector("#cardPendencias").textContent = pendencias;
+}
+
+function updateVisualCard() {
+  const ocorrencias = getOcorrencias().filter((item) => item.veiculo || item.relato || item.acao || item.obs);
+  const list = document.querySelector("#cardOcorrenciasList");
+  const checklist = [
+    `Status: ${selectedRadio("saidaStatus")}`,
+    value("resumoSaidas") ? `Resumo: ${value("resumoSaidas")}` : "",
+    value("excecoesSaida") ? `Excecoes: ${value("excecoesSaida")}` : "",
+  ].filter(Boolean);
+const passagem = [];
+
+if (value("ficouFazer")) {
+  passagem.push(`Ficou para fazer: ${value("ficouFazer")}`);
+}
+
+if (value("atencaoProximo")) {
+  passagem.push(`Atencao: ${value("atencaoProximo")}`);
+}
+
+if (value("entrega") || value("recebe")) {
+  passagem.push(
+    `Entrega: ${fallback(value("entrega"))} | Recebe: ${fallback(value("recebe"))}`
+  );
+}
+  document.querySelector("#cardMeta").textContent = `Data: ${formatDate(value("data"))} | Turno: ${fallback(value("turno"))}`;
+  document.querySelector("#cardResp").textContent = `Responsavel: ${fallback(value("responsavel"))}`;
+  document.querySelector("#cardChecklist").textContent = checklist.join("\n") || "-";
+  document.querySelector("#cardPassagem").textContent =
+  passagem.length ? passagem.join("\n") : "Sem pendências";
+
+  list.innerHTML = ocorrencias.length
+    ? ocorrencias
+        .map(
+          (item, index) => `
+            <div class="visual-item">
+              <strong>${index + 1}. ${escapeHtml(fallback(item.tipo))} | ${escapeHtml(fallback(item.veiculo, "Prefixo/placa nao informado"))}</strong>
+              <p><b>Condicao:</b> ${escapeHtml(fallback(item.condicao))}</p>
+              <p><b>Ocorrencia:</b> ${escapeHtml(fallback(item.relato))}</p>
+              <p><b>Acao:</b> ${escapeHtml(fallback(item.acao))}</p>
+              ${item.obs ? `<p><b>Obs.:</b> ${escapeHtml(item.obs)}</p>` : ""}
+            </div>
+          `,
+        )
+        .join("")
+    : `<div class="visual-item"><strong>Sem ocorrencias informadas.</strong></div>`;
+}
+
+function updateResumo() {
+  resumoFinal.value = buildResumo();
+  updateMetrics();
+  updateVisualCard();
+}
+
+function copyResumo() {
+  updateResumo();
+  resumoFinal.select();
+  navigator.clipboard
+    ?.writeText(resumoFinal.value)
+    .then(() => {
+      document.querySelector("#copyResumo").textContent = "Copiado";
+      setTimeout(() => (document.querySelector("#copyResumo").textContent = "Copiar"), 1400);
+    })
+    .catch(() => document.execCommand("copy"));
+}
+
+function openWhatsapp() {
+  updateResumo();
+  const url = `https://wa.me/?text=${encodeURIComponent(resumoFinal.value)}`;
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight, maxLines = 99) {
+  const words = String(text || "-").split(/\s+/);
+  const lines = [];
+  let line = "";
+
+  words.forEach((word) => {
+    const test = line ? `${line} ${word}` : word;
+    if (ctx.measureText(test).width > maxWidth && line) {
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  });
+
+  if (line) lines.push(line);
+  lines.slice(0, maxLines).forEach((item, index) => ctx.fillText(item, x, y + index * lineHeight));
+  return y + Math.min(lines.length, maxLines) * lineHeight;
+}
+
+function drawSummaryImage() {
+  updateResumo();
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+  const w = 1200;
+  const h = 1600;
+  canvas.width = w;
+  canvas.height = h;
+
+  ctx.fillStyle = "#f2f4f7";
+  ctx.fillRect(0, 0, w, h);
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(70, 55, 1060, 1490);
+  ctx.strokeStyle = "#d8dde5";
+  ctx.lineWidth = 2;
+  ctx.strokeRect(70, 55, 1060, 1490);
+
+  ctx.fillStyle = "#e60012";
+  ctx.fillRect(70, 55, 1060, 118);
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "italic 900 44px Segoe UI, Arial";
+  ctx.fillText("J&T", 105, 128);
+  ctx.font = "italic 900 26px Segoe UI, Arial";
+  ctx.fillText("EXPRESS", 198, 128);
+  ctx.font = "800 30px Segoe UI, Arial";
+  ctx.fillText("Passagem de Turno - Frota", 610, 112);
+  ctx.font = "600 19px Segoe UI, Arial";
+  ctx.fillText(`Data: ${formatDate(value("data"))} | Turno: ${fallback(value("turno"))}`, 610, 143);
+
+  const ocorrencias = getOcorrencias().filter((item) => item.veiculo || item.relato || item.acao || item.obs);
+  const pendencias = document.querySelector("#metricPendencias").textContent;
+  const metricY = 205;
+  [
+    ["Ocorrencias", ocorrencias.length],
+    ["Saidas", selectedRadio("saidaStatus") || "100%"],
+    ["Pendencias", pendencias],
+  ].forEach(([label, val], index) => {
+    const x = 105 + index * 335;
+    ctx.fillStyle = "#fff8f8";
+    ctx.fillRect(x, metricY, 300, 92);
+    ctx.fillStyle = "#e60012";
+    ctx.fillRect(x, metricY, 7, 92);
+    ctx.fillStyle = "#6b7280";
+    ctx.font = "800 18px Segoe UI, Arial";
+    ctx.fillText(label.toUpperCase(), x + 24, metricY + 34);
+    ctx.fillStyle = "#e60012";
+    ctx.font = "900 34px Segoe UI, Arial";
+    ctx.fillText(String(val), x + 24, metricY + 74);
+  });
+
+  let y = 345;
+  function section(title) {
+    ctx.fillStyle = "#111827";
+    ctx.font = "900 23px Segoe UI, Arial";
+    ctx.fillText(title, 105, y);
+    y += 18;
+    ctx.strokeStyle = "#e60012";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(105, y);
+    ctx.lineTo(1095, y);
+    ctx.stroke();
+    y += 34;
+  }
+
+  section("OCORRENCIAS / ACAO TOMADA");
+  ctx.font = "600 20px Segoe UI, Arial";
+  ctx.fillStyle = "#29313a";
+  if (!ocorrencias.length) {
+    ctx.fillText("Sem ocorrencias informadas.", 105, y);
+    y += 40;
+  } else {
+    ocorrencias.slice(0, 5).forEach((item, index) => {
+      ctx.fillStyle = "#fafbfc";
+      ctx.fillRect(105, y - 24, 990, 155);
+      ctx.fillStyle = "#e60012";
+      ctx.fillRect(105, y - 24, 7, 155);
+      ctx.fillStyle = "#111827";
+      ctx.font = "900 21px Segoe UI, Arial";
+      ctx.fillText(`${index + 1}. ${fallback(item.tipo)} | ${fallback(item.veiculo, "Prefixo/placa nao informado")}`, 128, y + 2);
+      ctx.fillStyle = "#29313a";
+      ctx.font = "600 18px Segoe UI, Arial";
+      y = wrapCanvasText(ctx, `Condicao: ${fallback(item.condicao)}`, 128, y + 32, 930, 23, 1);
+      y = wrapCanvasText(ctx, `Ocorrencia: ${fallback(item.relato)}`, 128, y + 4, 930, 23, 2);
+      y = wrapCanvasText(ctx, `Acao: ${fallback(item.acao)}`, 128, y + 4, 930, 23, 2);
+      if (item.obs) y = wrapCanvasText(ctx, `Obs.: ${item.obs}`, 128, y + 4, 930, 23, 1);
+      y += 34;
+    });
+  }
+
+  section("CHECKLIST DE SAIDAS");
+  ctx.fillStyle = "#29313a";
+  ctx.font = "600 20px Segoe UI, Arial";
+  y = wrapCanvasText(ctx, `Status: ${selectedRadio("saidaStatus") || "100%"}`, 105, y, 990, 26, 1);
+  y = wrapCanvasText(ctx, `Resumo: ${fallback(value("resumoSaidas"))}`, 105, y + 8, 990, 26, 3);
+  if (value("excecoesSaida")) y = wrapCanvasText(ctx, `Excecoes: ${value("excecoesSaida")}`, 105, y + 8, 990, 26, 3);
+  y += 38;
+
+  section("PASSAGEM / PENDENCIAS");
+  y = wrapCanvasText(ctx, `Ficou para fazer: ${fallback(value("ficouFazer"))}`, 105, y, 990, 26, 3);
+  y = wrapCanvasText(ctx, `Atencao proximo turno: ${fallback(value("atencaoProximo"))}`, 105, y + 8, 990, 26, 3);
+  y = wrapCanvasText(ctx, `Entrega: ${fallback(value("entrega"))} | Recebe: ${fallback(value("recebe"))}`, 105, y + 8, 990, 26, 2);
+
+  ctx.strokeStyle = "#d8dde5";
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(105, 1490);
+  ctx.lineTo(1095, 1490);
+  ctx.stroke();
+  ctx.fillStyle = "#6b7280";
+  ctx.font = "700 18px Segoe UI, Arial";
+  ctx.fillText(`Responsavel: ${fallback(value("responsavel"))}`, 105, 1524);
+  ctx.fillText("J&T Express | Operacao Frota", 810, 1524);
+  return canvas;
+}
+
+function downloadImage() {
+  const canvas = drawSummaryImage();
+  const link = document.createElement("a");
+  link.download = `jt-passagem-turno-${Date.now()}.png`;
+  link.href = canvas.toDataURL("image/png");
+  link.click();
+}
+
+function copyImage() {
+  const button = document.querySelector("#copyImage");
+  const canvas = drawSummaryImage();
+  canvas.toBlob(async (blob) => {
+    try {
+      if (!navigator.clipboard || !window.ClipboardItem) throw new Error("clipboard image unsupported");
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
+      button.textContent = "Imagem copiada";
+      setTimeout(() => (button.textContent = "Copiar imagem"), 1400);
+    } catch {
+      downloadImage();
+      button.textContent = "Baixada";
+      setTimeout(() => (button.textContent = "Copiar imagem"), 1400);
+    }
+  }, "image/png");
+}
+
+tabs.forEach((tab) => tab.addEventListener("click", () => activateTab(tab.dataset.tab)));
+document.querySelector("#addOcorrencia").addEventListener("click", () => addOcorrencia());
+document.querySelector("#copyResumo").addEventListener("click", copyResumo);
+document.querySelector("#copyImage").addEventListener("click", copyImage);
+document.querySelector("#downloadImage").addEventListener("click", downloadImage);
+document.querySelector("#openWhatsapp").addEventListener("click", openWhatsapp);
+
+fields.forEach((id) => {
+  const el = document.querySelector(`#${id}`);
+  el?.addEventListener("input", updateResumo);
+  el?.addEventListener("change", updateResumo);
+});
+
+document.querySelectorAll('input[name="saidaStatus"]').forEach((el) => {
+  el.addEventListener("change", updateResumo);
+});
+
+document.querySelector("#data").valueAsDate = new Date();
+addOcorrencia({
+  tipo: "Carreta",
+  condicao: "Liberado provisoriamente",
+  obs: "Liberado provisoriamente, deve parar no retorno para nova avaliacao/manutencao.",
+  status: "Liberado provisoriamente",
+});
+document.querySelector("#resumoSaidas").value = "Todos 100%, exceto os itens informados em excecoes.";
+document.querySelector("#excecoesSaida").value = "";
+updateResumo();
+
+</script>
+  </body>
+</html>
