@@ -991,7 +991,7 @@ function buildResumo() {
     .filter((item) => item.veiculo || item.relato || item.acao || item.obs)
     .map((item, index) => {
       return [
-        `${index + 1}) ${fallback(item.tipo)} | ${fallback(item.veiculo, "Prefixo/placa nao informado")}`,
+        `${index + 1}) ${fallback(item.tipo)} | ${fallback(item.veiculo, "placa nao informado")}`,
         `Condicao: ${fallback(item.condicao)}`,
         `Ocorrencia: ${fallback(item.relato)}`,
         `Acao tomada: ${fallback(item.acao)}`,
@@ -1078,7 +1078,7 @@ if (value("entrega") || value("recebe")) {
         .map(
           (item, index) => `
             <div class="visual-item">
-              <strong>${index + 1}. ${escapeHtml(fallback(item.tipo))} | ${escapeHtml(fallback(item.veiculo, "Prefixo/placa nao informado"))}</strong>
+              <strong>${index + 1}. ${escapeHtml(fallback(item.tipo))} | ${escapeHtml(fallback(item.veiculo, "placa nao informado"))}</strong>
               <p><b>Condicao:</b> ${escapeHtml(fallback(item.condicao))}</p>
               <p><b>Ocorrencia:</b> ${escapeHtml(fallback(item.relato))}</p>
               <p><b>Acao:</b> ${escapeHtml(fallback(item.acao))}</p>
@@ -1213,7 +1213,7 @@ function drawSummaryImage() {
       ctx.fillRect(105, y - 24, 7, 155);
       ctx.fillStyle = "#111827";
       ctx.font = "900 21px Segoe UI, Arial";
-      ctx.fillText(`${index + 1}. ${fallback(item.tipo)} | ${fallback(item.veiculo, "Prefixo/placa nao informado")}`, 128, y + 2);
+      ctx.fillText(`${index + 1}. ${fallback(item.tipo)} | ${fallback(item.veiculo, "placa nao informado")}`, 128, y + 2);
       ctx.fillStyle = "#29313a";
       ctx.font = "600 18px Segoe UI, Arial";
       y = wrapCanvasText(ctx, `Condicao: ${fallback(item.condicao)}`, 128, y + 32, 930, 23, 1);
